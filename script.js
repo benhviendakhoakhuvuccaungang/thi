@@ -1,6 +1,5 @@
-// ... (Các phần cấu hình giữ nguyên) ...
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnyXJe-R8lpM7vlgn8t5oehSr8-rGAcz2JPkmljGaraNS9Csup8bivahBKxdodo5m0/exec'; 
 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnyXJe-R8lpM7vlgn8t5oehSr8-rGAcz2JPkmljGaraNS9Csup8bivahBKxdodo5m0/exec'; 
 let questions = [];          
 let currentQuestion = 0;     
 let userAnswers = [];        
@@ -13,10 +12,6 @@ let isReviewMode = false;
 let violationCount = 0;      
 const MAX_VIOLATIONS = 3;    
 let isQuizActive = false;    
-
-// ... (Phần Đăng nhập, startQuiz, handleVisibilityChange GIỮ NGUYÊN) ...
-// (Lưu ý: Logic quyền Admin nằm ở hàm loadQuestion bên dưới)
-
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const usernameInput = document.getElementById('username');
