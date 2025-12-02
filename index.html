@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hệ thống Thi Trắc Nghiệm Y Tế</title>
+    <!-- Liên kết đến file CSS bên ngoài -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 1. Form Đăng nhập -->
+        <div class="login-container" id="loginContainer">
+            <div class="login-left">
+                <div class="medical-icon">⚕️</div>
+                <h1>Hệ thống Thi Trắc Nghiệm Bệnh viện ĐKKV Cầu Ngang</h1>
+                <p>Đánh giá năng lực, tuyển dụng nhân viên</p>
+            </div>
+            <div class="login-right">
+                <h2>Đăng nhập</h2>
+                <div id="loginError" class="error-message"></div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập</label>
+                        <input type="text" id="username" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+                    </div>
+                    <button type="submit" class="btn-login" id="loginBtn">
+                        <span>Đăng nhập</span>
+                        <div class="loading-spinner" id="loadingSpinner"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Khu vực làm bài thi (Quiz) -->
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-header">
+                <h2 id="quizTitle">Bài Thi Trắc Nghiệm Y Tế</h2>
+                <div class="quiz-info">
+                    <span id="userName">Thí sinh: ...</span>
+                    <span id="questionCount"></span>
+                    <span id="timer">Thời gian: 30:00</span>
+                </div>
+            </div>
+            <div id="questionContainer"></div>
+            <div class="quiz-actions">
+                <button class="btn btn-prev" id="prevBtn" onclick="previousQuestion()">Câu trước</button>
+                <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">Câu tiếp</button>
+                <button class="btn btn-submit" id="submitBtn" onclick="submitQuiz()" style="display: none;">Nộp
+                    bài</button>
+                <button class="btn" id="finishReviewBtn" onclick="finishReview()"
+                    style="display: none; background: #64748b; color: white;">Trở về kết quả</button>
+            </div>
+        </div>
+
+        <!-- 3. Khu vực Kết quả -->
+        <div class="result-container" id="resultContainer" style="display: none;">
+            <h2>🎉 Hoàn thành bài thi!</h2>
+            <div id="processingMessage" style="color: #d97706; font-weight: bold; margin: 20px 0;">
+                Đang lưu kết quả... Vui lòng đợi.
+            </div>
+
+            <div id="pdfResultArea" style="display: none; margin: 20px 0;">
+                <p>✅ Đã lưu bài thi!</p>
+                <a id="pdfLinkBtn" href="#" target="_blank" class="btn"
+                    style="background: #ef4444; color: white; text-decoration: none; display: inline-block; margin-top: 10px;">
+                    📂 Xem lại bài thi (PDF)
+                </a>
+            </div>
+
+            <div id="scoreArea" style="display: none; margin-top: 20px;">
+                <div class="result-score" id="resultScore">0/0</div>
+                <div class="result-message" id="resultMessage"></div>
+            </div>
+            <div class="quiz-actions" style="justify-content: center; gap: 10px; margin-top: 30px;">
+                <button class="btn" id="viewScoreBtn" onclick="showScore()"
+                    style="background: #10b981; color: white; display: none;">Xem điểm số</button>
+                <button class="btn" id="reviewQuizBtn" onclick="reviewQuiz()"
+                    style="background: #f59e0b; color: white; display: none;">Xem lại bài làm</button>
+                <button class="btn" onclick="logout()" style="background: #64748b; color: white;">Đăng xuất</button>
+            </div>
+        </div>
+
+        <!-- 4. KHU VỰC ĐÃ THI RỒI -->
+        <div id="leaderboardContainer" class="result-container" style="display: none;">
+            <div style="font-size: 50px; margin-bottom: 20px;">🚫</div>
+            <h2 style="color: #ef4444;">Bạn đã hoàn thành bài thi này!</h2>
+            <p id="welcomeBackUser" style="margin: 10px 0; color: #475569;"></p>
+
+            <div id="oldPdfLinkArea" style="margin: 20px 0;">
+                <a id="oldPdfLinkBtn" href="#" target="_blank" class="btn"
+                    style="background: #ef4444; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+                    📂 Xem lại bài thi của bạn
+                </a>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #3b82f6;">🏆 BẢNG XẾP HẠNG</h3>
+            <div style="overflow-x: auto;">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Top</th>
+                            <th>Họ Tên</th>
+                            <th>Điểm</th>
+                            <th>Thời gian</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody"></tbody>
+                </table>
+            </div>
+            <button class="btn" onclick="logout()" style="background: #64748b; color: white; margin-top: 30px;">Đăng
+                xuất</button>
+        </div>
+    </div>
+
+    <!-- 5. MODAL CẢNH BÁO CHƯA LÀM XONG (Cũ) -->
+    <div id="warningModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">⚠️ Chưa hoàn thành</div>
+            <div class="modal-body">
+                <p>Bạn vẫn còn một số câu hỏi chưa trả lời.</p>
+                <p>Vui lòng chọn vào số câu bên dưới để làm tiếp:</p>
+                <div id="missingQuestionsList"
+                    style="margin-top: 15px; display: flex; flex-wrap: wrap; justify-content: center;"></div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeWarningModal()">Đóng và làm tiếp</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MODAL CẢNH BÁO VI PHẠM (MỚI) -->
+    <div id="violationModal" class="modal" style="background-color: rgba(220, 38, 38, 0.8);">
+        <div class="modal-content" style="border: 2px solid #ef4444;">
+            <div class="modal-header">⛔ CẢNH BÁO VI PHẠM</div>
+            <div class="modal-body">
+                <p style="font-weight: bold; color: #b91c1c;">Bạn đã rời khỏi màn hình làm bài!</p>
+                <p>Hệ thống phát hiện bạn đã mở ứng dụng khác hoặc tab khác.</p>
+                <p style="margin-top: 15px; font-size: 18px; color: #ef4444;">
+                    Lần vi phạm: <strong id="violationCountDisplay">0</strong> / 3
+                </p>
+                <p style="font-size: 13px; color: #64748b; margin-top: 10px;">Nếu vi phạm quá 3 lần, bài thi sẽ tự động
+                    bị nộp.</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeViolationModal()" style="background: #ef4444;">Tôi đã hiểu & Quay lại thi</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
