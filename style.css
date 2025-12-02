@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Loại bỏ highlight khi tap trên mobile */
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -13,7 +13,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 15px; /* Giảm padding body trên mobile */
+    padding: 15px;
 }
 
 .container {
@@ -26,11 +26,7 @@ body {
 }
 
 /* --- Giao diện Đăng nhập --- */
-.login-container {
-    display: flex;
-    min-height: 500px;
-}
-
+.login-container { display: flex; min-height: 500px; }
 .login-left {
     flex: 1;
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
@@ -40,23 +36,9 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-
-.login-left h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
-}
-
-.login-left p {
-    font-size: 16px;
-    line-height: 1.6;
-    opacity: 0.9;
-}
-
-.medical-icon {
-    font-size: 80px;
-    margin-bottom: 30px;
-}
-
+.login-left h1 { font-size: 32px; margin-bottom: 20px; }
+.login-left p { font-size: 16px; line-height: 1.6; opacity: 0.9; }
+.medical-icon { font-size: 80px; margin-bottom: 30px; }
 .login-right {
     flex: 1;
     padding: 60px 40px;
@@ -64,65 +46,35 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-
-.login-right h2 {
-    color: #1e293b;
-    margin-bottom: 30px;
-    font-size: 28px;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    display: block;
-    color: #475569;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
+.login-right h2 { color: #1e293b; margin-bottom: 30px; font-size: 28px; }
+.form-group { margin-bottom: 25px; }
+.form-group label { display: block; color: #475569; font-weight: 500; margin-bottom: 8px; }
 .form-group input {
     width: 100%;
-    padding: 14px 15px; /* Tăng vùng đệm nhập liệu */
+    padding: 14px 15px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s;
 }
-
-.form-group input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
+.form-group input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
 .btn-login {
     width: 100%;
-    padding: 16px; /* Nút to hơn trên mobile */
+    padding: 16px;
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 18px; /* Chữ to hơn */
+    font-size: 18px;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.2s;
     position: relative;
 }
+.btn-login:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+.btn-login:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3); }
 
-.btn-login:disabled {
-    background: #94a3b8;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-login:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-}
-
-/* Loading Spinner & Error Message */
+/* Loading & Error */
 .loading-spinner {
     display: none;
     width: 20px;
@@ -135,7 +87,6 @@ body {
     right: 15px;
     top: 16px;
 }
-
 .error-message {
     color: #ef4444;
     background-color: #fef2f2;
@@ -146,18 +97,10 @@ body {
     display: none;
     border: 1px solid #fecaca;
 }
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* --- Giao diện Quiz --- */
-.quiz-container {
-    display: none;
-    padding: 30px; /* Giảm padding */
-}
-
+.quiz-container { display: none; padding: 30px; }
 .quiz-header {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
@@ -165,21 +108,15 @@ body {
     border-radius: 15px;
     margin-bottom: 25px;
 }
-
-.quiz-header h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
+.quiz-header h2 { font-size: 24px; margin-bottom: 10px; }
 .quiz-info {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap; /* Cho phép xuống dòng trên mobile */
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: 15px;
     font-size: 14px;
 }
-
 .question-card {
     background: #f8fafc;
     padding: 20px;
@@ -187,66 +124,26 @@ body {
     margin-bottom: 20px;
     border: 2px solid #e2e8f0;
 }
-
-.question-number {
-    color: #3b82f6;
-    font-weight: 600;
-    margin-bottom: 15px;
-    font-size: 16px;
-}
-
-.question-text {
-    font-size: 18px;
-    color: #1e293b;
-    margin-bottom: 20px;
-    line-height: 1.5;
-    font-weight: 500;
-}
-
-.options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
+.question-number { color: #3b82f6; font-weight: 600; margin-bottom: 15px; font-size: 16px; }
+.question-text { font-size: 18px; color: #1e293b; margin-bottom: 20px; line-height: 1.5; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 12px; }
 .option {
-    padding: 16px 20px; /* Tăng vùng chạm */
+    padding: 16px 20px;
     background: white;
     border: 2px solid #e2e8f0;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
-    align-items: flex-start; /* Căn chỉnh nội dung dài */
+    align-items: flex-start;
     font-size: 16px;
     line-height: 1.4;
 }
+.option:hover { border-color: #3b82f6; background: #eff6ff; }
+.option input[type="radio"] { margin-right: 15px; min-width: 22px; height: 22px; margin-top: 2px; cursor: pointer; }
+.option.selected { background: #dbeafe; border-color: #3b82f6; }
 
-.option:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
-}
-
-.option input[type="radio"] {
-    margin-right: 15px;
-    min-width: 22px; /* Kích thước cố định */
-    height: 22px;
-    margin-top: 2px; /* Căn chỉnh với dòng đầu */
-    cursor: pointer;
-}
-
-.option.selected {
-    background: #dbeafe;
-    border-color: #3b82f6;
-}
-
-.quiz-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-    gap: 10px;
-}
-
+.quiz-actions { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px; }
 .btn {
     padding: 14px 24px;
     border: none;
@@ -255,50 +152,22 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    flex: 1; /* Chia đều chiều rộng nút trên mobile */
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-decoration: none;
 }
-
-.btn-prev {
-    background: #e2e8f0;
-    color: #475569;
-}
-
-.btn-next,
-.btn-submit {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+.btn-prev { background: #e2e8f0; color: #475569; }
+.btn-next, .btn-submit { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
 
 /* --- Giao diện Kết quả --- */
-.result-container {
-    display: none;
-    padding: 30px 20px;
-    text-align: center;
-}
+.result-container { display: none; padding: 30px 20px; text-align: center; }
+.result-score { font-size: 64px; color: #3b82f6; font-weight: bold; margin: 20px 0; }
+.result-message { font-size: 20px; color: #1e293b; margin-bottom: 30px; line-height: 1.5; }
 
-.result-score {
-    font-size: 64px;
-    color: #3b82f6;
-    font-weight: bold;
-    margin: 20px 0;
-}
-
-.result-message {
-    font-size: 20px;
-    color: #1e293b;
-    margin-bottom: 30px;
-    line-height: 1.5;
-}
-
-/* --- CSS Bảng xếp hạng --- */
+/* Bảng xếp hạng */
 .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
 .leaderboard-table th, .leaderboard-table td { border: 1px solid #e2e8f0; padding: 10px; text-align: center; }
 .leaderboard-table th { background-color: #3b82f6; color: white; }
@@ -306,71 +175,44 @@ body {
 .rank-2 { background-color: #f3f4f6; font-weight: bold; color: #4b5563; }
 .rank-3 { background-color: #ffedd5; font-weight: bold; color: #9a3412; }
 
-/* CSS Modal (Dùng chung cho Cảnh báo và Vi phạm) */
+/* Modal */
 .modal {
-    display: none;
-    position: fixed; 
-    z-index: 2000; 
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgba(0,0,0,0.6); 
-    backdrop-filter: blur(4px);
+    display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+    width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
     animation: fadeIn 0.3s;
 }
-
 .modal-content {
-    background-color: #fefefe;
-    margin: 20% auto; /* Canh giữa hơn trên mobile */
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    width: 90%;
-    max-width: 450px;
-    text-align: center;
-    position: relative;
+    background-color: #fefefe; margin: 20% auto; padding: 25px;
+    border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 90%; max-width: 450px; text-align: center; position: relative;
     animation: slideDown 0.3s;
 }
-
 @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
 @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
-
 .modal-header { font-size: 20px; font-weight: bold; color: #e11d48; margin-bottom: 15px; }
 .modal-body { font-size: 16px; color: #334155; margin-bottom: 25px; line-height: 1.5; }
-
-/* Style Badge câu hỏi thiếu */
 .missing-question-badge {
-    display: inline-block;
-    background-color: #fee2e2;
-    color: #991b1b;
-    padding: 8px 12px;
-    margin: 4px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid #fecaca;
-    font-size: 14px;
+    display: inline-block; background-color: #fee2e2; color: #991b1b;
+    padding: 8px 12px; margin: 4px; border-radius: 8px; font-weight: bold;
+    cursor: pointer; border: 1px solid #fecaca; font-size: 14px;
+}
+.modal-footer button { background: #64748b; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; }
+
+/* --- CSS QUAN TRỌNG: Admin Hint & Review --- */
+/* Đã thêm lại phần này để Admin thấy gợi ý */
+.admin-hint {
+    font-style: italic !important;
+    color: #059669 !important; /* Xanh lá đậm */
+    font-weight: 700 !important;
+    background-color: #f0fdf4 !important; /* Nền xanh rất nhạt */
+    border: 1px dashed #22c55e !important;
 }
 
-.modal-footer button {
-    background: #64748b;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%; /* Nút full chiều rộng trên modal mobile */
-}
-
-/* CSS cho chế độ Xem lại */
 .option.review-correct { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #15803d; }
 .option.review-wrong { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c; }
 .option.disabled { cursor: default; pointer-events: none; }
 
-/* --- RESPONSIVE MOBILE --- */
+/* Responsive */
 @media (max-width: 768px) {
     body { padding: 10px; }
     .container { border-radius: 15px; }
