@@ -1,7 +1,6 @@
 // ... (Các phần cấu hình giữ nguyên) ...
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnyXJe-R8lpM7vlgn8t5oehSr8-rGAcz2JPkmljGaraNS9Csup8bivahBKxdodo5m0/exec'; 
 
-// --- CÁC BIẾN TOÀN CỤC ---
 let questions = [];          
 let currentQuestion = 0;     
 let userAnswers = [];        
@@ -11,12 +10,13 @@ let currentUserRole = '';
 let currentLoginUser = '';   
 let startTime;               
 let isReviewMode = false;
-// --- BIẾN MỚI CHO VIỆC CHỐNG GIAN LẬN ---
-let violationCount = 0;      // Đếm số lần vi phạm
-const MAX_VIOLATIONS = 3;    // Giới hạn số lần cho phép
-let isQuizActive = false;    // Trạng thái đang làm bài (để chặn check khi chưa thi)
+let violationCount = 0;      
+const MAX_VIOLATIONS = 3;    
+let isQuizActive = false;    
 
-// ... (Phần Đăng nhập giữ nguyên) ...
+// ... (Phần Đăng nhập, startQuiz, handleVisibilityChange GIỮ NGUYÊN) ...
+// (Lưu ý: Logic quyền Admin nằm ở hàm loadQuestion bên dưới)
+
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const usernameInput = document.getElementById('username');
@@ -108,8 +108,8 @@ function startQuiz(fullName) {
     userAnswers = new Array(questions.length).fill(null);
     currentQuestion = 0;
     isReviewMode = false;
-    violationCount = 0; // Reset vi phạm
-    isQuizActive = true; // Bắt đầu theo dõi
+    violationCount = 0; 
+    isQuizActive = true; 
     
     document.getElementById('userName').textContent = `Thí sinh: ${fullName}`;
     document.getElementById('questionCount').textContent = `Tổng số câu: ${questions.length}`;
@@ -119,34 +119,26 @@ function startQuiz(fullName) {
     try { loadQuestion(); } catch (e) { document.getElementById('questionContainer').innerHTML = `<p style="color:red">Lỗi: ${e.message}</p>`; }
     startTimer();
 
-    // Bắt đầu lắng nghe sự kiện rời màn hình
     document.addEventListener("visibilitychange", handleVisibilityChange);
 }
 
-// --- HÀM XỬ LÝ VI PHẠM ---
 function handleVisibilityChange() {
-    // Chỉ kiểm tra khi đang thi và tab bị ẩn
     if (isQuizActive && document.hidden) {
         violationCount++;
         document.getElementById('violationCountDisplay').textContent = violationCount;
-        
-        // Hiện Modal cảnh báo
         document.getElementById('violationModal').style.display = 'block';
 
-        // Nếu quá giới hạn -> Nộp luôn
         if (violationCount > MAX_VIOLATIONS) {
-            isQuizActive = false; // Dừng theo dõi để không loop
+            isQuizActive = false; 
             document.removeEventListener("visibilitychange", handleVisibilityChange);
             alert("Bạn đã vi phạm quy chế thi quá 3 lần. Bài thi sẽ tự động nộp ngay lập tức!");
-            closeViolationModal(); // Đóng modal cảnh báo
-            submitQuiz(true); // Gọi nộp bài (forceSubmit = true)
+            closeViolationModal(); 
+            submitQuiz(true); 
         }
     }
 }
 
-function closeViolationModal() {
-    document.getElementById('violationModal').style.display = 'none';
-}
+function closeViolationModal() { document.getElementById('violationModal').style.display = 'none'; }
 
 function loadQuestion() {
     if (!questions || !questions[currentQuestion]) return;
@@ -161,12 +153,16 @@ function loadQuestion() {
                 ${options.map((option, index) => {
                     let additionalClass = '';
                     let isChecked = (userAnswers[currentQuestion] === index);
+                    
                     if (isReviewMode) {
                         additionalClass += ' disabled';
                         if (index === question.correct) additionalClass += ' review-correct';
                         else if (isChecked && index !== question.correct) additionalClass += ' review-wrong';
                     } else {
-                        if (currentUserRole === 'ad' && index === question.correct) additionalClass += ' admin-hint';
+                        // --- QUAN TRỌNG: Logic hiển thị gợi ý cho Admin nằm ở đây ---
+                        if (currentUserRole === 'ad' && index === question.correct) {
+                            additionalClass += ' admin-hint';
+                        }
                     }
                     return `
                     <label class="option ${isChecked ? 'selected' : ''} ${additionalClass}">
@@ -215,9 +211,7 @@ function selectAnswer(index) {
 function nextQuestion() { if (currentQuestion < questions.length - 1) { currentQuestion++; loadQuestion(); } }
 function previousQuestion() { if (currentQuestion > 0) { currentQuestion--; loadQuestion(); } }
 
-// --- HÀM NỘP BÀI (CÓ THAM SỐ FORCE SUBMIT) ---
 function submitQuiz(forceSubmit = false) {
-    // Nếu không phải ép buộc nộp (do hết giờ hoặc vi phạm) thì mới check câu hỏi
     if (!forceSubmit && timeLeft > 0) { 
         let missingIndices = [];
         for (let i = 0; i < questions.length; i++) {
@@ -231,7 +225,6 @@ function submitQuiz(forceSubmit = false) {
         }
     }
 
-    // Dừng theo dõi vi phạm
     isQuizActive = false;
     document.removeEventListener("visibilitychange", handleVisibilityChange);
 
@@ -267,7 +260,6 @@ function submitQuiz(forceSubmit = false) {
     
     let message = '';
     if (score100 >= 80) message = 'Xuất sắc!'; else if (score100 >= 60) message = 'Khá tốt!'; else message = 'Cần cố gắng thêm!';
-    // Nếu bị ép nộp
     if (forceSubmit) {
         message = 'Bài thi đã bị nộp tự động do vi phạm quy chế thi!';
         document.getElementById('resultMessage').style.color = 'red';
